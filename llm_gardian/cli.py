@@ -22,7 +22,7 @@ try:
 except ImportError:
     RICH_AVAILABLE = False
     print("⚠️  Install 'rich' for enhanced CLI experience:")
-    print("   uv pip install rich  (recommended - fast!)")
+    print("   uv sync              (recommended - fast!)")
     print("   pip install rich     (alternative)")
 
 # Initialize Rich console

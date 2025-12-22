@@ -33,8 +33,11 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 git clone https://github.com/TechKub/LLM-Gardian.git
 cd LLM-Gardian
 
-# Install with uv
-uv pip install -e .
+# Sync dependencies (creates virtual environment automatically)
+uv sync
+
+# Run the CLI
+uv run python -m llm_gardian.cli "your prompt here"
 ```
 
 ### Using pip

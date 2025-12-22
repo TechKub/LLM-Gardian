@@ -4,7 +4,7 @@
 
 ```bash
 # Using uv (recommended - fast!)
-uv pip install -e .
+uv sync
 
 # Or using pip
 pip install -e .
