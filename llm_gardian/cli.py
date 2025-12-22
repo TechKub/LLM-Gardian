@@ -4,9 +4,11 @@ Command-line interface for LLM-Gardian
 """
 
 import sys
+import os
 import json
 import argparse
-from llm_gardian import PromptInjectionPipeline, DetectorConfig
+import getpass
+from llm_gardian import PromptInjectionPipeline, DetectorConfig, __version__
 
 # Rich library imports for beautiful CLI
 try:
@@ -18,6 +20,8 @@ try:
     from rich import box
     from rich.text import Text
     from rich.style import Style
+    from rich.columns import Columns
+    from rich.align import Align
     RICH_AVAILABLE = True
 except ImportError:
     RICH_AVAILABLE = False
@@ -29,23 +33,107 @@ except ImportError:
 console = Console() if RICH_AVAILABLE else None
 
 
+def get_username():
+    """Get the current username"""
+    try:
+        return getpass.getuser().capitalize()
+    except Exception:
+        return "User"
+
+
+def get_short_path(path, max_length=45):
+    """Shorten path for display, using ~ for home directory"""
+    home = os.path.expanduser("~")
+    if path.startswith(home):
+        path = "~" + path[len(home):]
+    if len(path) > max_length:
+        parts = path.split(os.sep)
+        if len(parts) > 3:
+            path = os.path.join(parts[0], "...", *parts[-2:])
+    return path
+
+
 def print_banner():
-    """Display beautiful ASCII banner"""
+    """Display beautiful welcome screen similar to Claude Code"""
     if not RICH_AVAILABLE:
-        print("LLM-Gardian - Prompt Injection Protection")
+        print(f"LLM-Gardian v{__version__} - Prompt Injection Protection")
         return
 
-    banner = """
-    ╔═══════════════════════════════════════════════════════════╗
-    ║                                                           ║
-    ║         🛡️  LLM-Gardian  🛡️                              ║
-    ║                                                           ║
-    ║         Protect Against Prompt Injection Attacks         ║
-    ║                                                           ║
-    ╚═══════════════════════════════════════════════════════════╝
-    """
+    username = get_username()
+    cwd = get_short_path(os.getcwd())
 
-    console.print(banner, style="bold cyan")
+    # ASCII Art Shield Logo
+    logo_lines = [
+        "      [bold cyan]▄▄▄▄▄▄▄[/bold cyan]      ",
+        "    [bold cyan]▄█[/bold cyan][bold white]░░░░░[/bold white][bold cyan]█▄[/bold cyan]    ",
+        "   [bold cyan]██[/bold cyan][bold white]░[/bold white][bold green]▓▓▓▓▓[/bold green][bold white]░[/bold white][bold cyan]██[/bold cyan]   ",
+        "   [bold cyan]██[/bold cyan][bold white]░[/bold white][bold green]▓[/bold green][bold yellow]███[/bold yellow][bold green]▓[/bold green][bold white]░[/bold white][bold cyan]██[/bold cyan]   ",
+        "   [bold cyan]██[/bold cyan][bold white]░[/bold white][bold green]▓▓[/bold green][bold yellow]█[/bold yellow][bold green]▓▓[/bold green][bold white]░[/bold white][bold cyan]██[/bold cyan]   ",
+        "    [bold cyan]▀█[/bold cyan][bold white]░[/bold white][bold green]▓▓▓[/bold green][bold white]░[/bold white][bold cyan]█▀[/bold cyan]    ",
+        "      [bold cyan]▀█[/bold cyan][bold white]░[/bold white][bold cyan]█▀[/bold cyan]      ",
+        "        [bold cyan]▀[/bold cyan]        ",
+    ]
+
+    # Left column content
+    left_content = Text()
+    left_content.append(f"\n  Welcome back {username}!\n\n", style="bold white")
+    
+    for line in logo_lines:
+        left_content.append("  ")
+        # We need to use console.print for markup, so build this differently
+    
+    # Build left side with logo
+    left_lines = [
+        "",
+        f"  [bold white]Welcome back {username}![/bold white]",
+        "",
+    ] + [f"  {line}" for line in logo_lines] + [
+        "",
+        f"  [bold cyan]LLM-Gardian[/bold cyan] [dim]v{__version__}[/dim]",
+        f"  [dim]{cwd}[/dim]",
+    ]
+    
+    left_text = "\n".join(left_lines)
+
+    # Right column content - Tips and info
+    right_lines = [
+        "",
+        "[bold yellow]Tips for getting started[/bold yellow]",
+        "[dim]Run with[/dim] [bold cyan]--interactive[/bold cyan] [dim]for continuous checking[/dim]",
+        "[dim]Use[/dim] [bold cyan]--threshold 0.5[/bold cyan] [dim]to adjust sensitivity[/dim]",
+        "[dim]Add[/dim] [bold cyan]--verbose[/bold cyan] [dim]for detailed pattern analysis[/dim]",
+        "",
+        "[dim]─────────────────────────────────────────[/dim]",
+        "",
+        "[bold yellow]Quick Examples[/bold yellow]",
+        "[dim]Check a prompt:[/dim]  [cyan]llm-gardian \"your prompt\"[/cyan]",
+        "[dim]Interactive:[/dim]     [cyan]llm-gardian -i[/cyan]",
+        "[dim]JSON output:[/dim]     [cyan]llm-gardian -j \"prompt\"[/cyan]",
+        "",
+    ]
+    
+    right_text = "\n".join(right_lines)
+
+    # Create the two-column layout
+    left_panel = Text.from_markup(left_text)
+    right_panel = Text.from_markup(right_text)
+
+    # Create a table for side-by-side layout
+    layout_table = Table.grid(padding=(0, 2))
+    layout_table.add_column(width=40, justify="left")
+    layout_table.add_column(width=45, justify="left")
+    layout_table.add_row(left_panel, right_panel)
+
+    # Create the main panel
+    main_panel = Panel(
+        layout_table,
+        title=f"[bold cyan]─── LLM-Gardian v{__version__} ───[/bold cyan]",
+        border_style="cyan",
+        box=box.ROUNDED,
+        padding=(0, 1),
+    )
+
+    console.print(main_panel)
 
 
 def main():
