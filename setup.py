@@ -42,6 +42,8 @@ setup(
         ],
     },
     entry_points={
-        "console_scripts": [],
+        "console_scripts": [
+            "llm-gardian=llm_gardian_cli:main",
+        ],
     },
 )
