@@ -1,2 +1,4 @@
 # LLM-Gardian dependencies
-# No external dependencies required - uses only Python standard library
+# Core functionality uses only Python standard library
+# CLI enhancements use Rich for beautiful terminal output
+rich>=13.0.0
