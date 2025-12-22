@@ -23,6 +23,22 @@ LLM-Gardian provides a robust, lightweight solution to detect and prevent prompt
 
 ## Installation
 
+### Using uv (Recommended - Fast!)
+
+```bash
+# Install uv if you haven't already
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Clone the repository
+git clone https://github.com/TechKub/LLM-Gardian.git
+cd LLM-Gardian
+
+# Install with uv
+uv pip install -e .
+```
+
+### Using pip
+
 ```bash
 # Clone the repository
 git clone https://github.com/TechKub/LLM-Gardian.git

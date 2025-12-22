@@ -21,7 +21,9 @@ try:
     RICH_AVAILABLE = True
 except ImportError:
     RICH_AVAILABLE = False
-    print("⚠️  Install 'rich' for enhanced CLI experience: pip install rich")
+    print("⚠️  Install 'rich' for enhanced CLI experience:")
+    print("   uv pip install rich  (recommended - fast!)")
+    print("   pip install rich     (alternative)")
 
 # Initialize Rich console
 console = Console() if RICH_AVAILABLE else None

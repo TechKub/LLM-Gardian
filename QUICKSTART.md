@@ -3,6 +3,10 @@
 ## Installation
 
 ```bash
+# Using uv (recommended - fast!)
+uv pip install -e .
+
+# Or using pip
 pip install -e .
 ```
 
