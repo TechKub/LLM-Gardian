@@ -43,9 +43,11 @@ def main():
     print("Blocked Prompts Details:")
     print("=" * 80)
     
+    blocked_index = 0
     for i, (prompt, result) in enumerate(zip(prompts, results)):
         if not result["allowed"]:
-            print(f"\n{blocked_count}. \"{prompt}\"")
+            blocked_index += 1
+            print(f"\n{blocked_index}. \"{prompt}\"")
             detection_result = result["result"]
             print(f"   Risk: {detection_result.risk_level}")
             print(f"   Confidence: {detection_result.confidence_score:.2%}")

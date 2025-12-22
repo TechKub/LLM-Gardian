@@ -4,8 +4,6 @@ Comprehensive demo of LLM-Gardian functionality
 """
 
 import sys
-sys.path.insert(0, '/home/runner/work/LLM-Gardian/LLM-Gardian')
-
 from llm_gardian import PromptInjectionPipeline, DetectorConfig, PromptInjectionDetector
 
 
