@@ -8,18 +8,18 @@ LLM-Gardian provides a robust, lightweight solution to detect and prevent prompt
 
 ## Features
 
-- 🛡️ **Multi-layered Detection**: Combines pattern matching, heuristic analysis, and encoding detection
-- 🎯 **High Accuracy**: Detects various prompt injection techniques including:
+- **Multi-layered Detection**: Combines pattern matching, heuristic analysis, and encoding detection
+- **High Accuracy**: Detects various prompt injection techniques including:
   - Instruction override attempts ("ignore previous instructions")
   - System prompt extraction attempts
   - Role manipulation
   - Delimiter-based injections
   - Jailbreak attempts (DAN, STAN, developer mode)
   - Encoded/obfuscated attacks
-- ⚙️ **Configurable**: Customize detection thresholds, patterns, and whitelists
-- 📊 **Statistics Tracking**: Monitor detection rates and pipeline performance
-- 🚀 **Easy to Use**: Simple API with sensible defaults
-- 🔧 **No Dependencies**: Uses only Python standard library
+- **Configurable**: Customize detection thresholds, patterns, and whitelists
+- **Statistics Tracking**: Monitor detection rates and pipeline performance
+- **Easy to Use**: Simple API with sensible defaults
+- **No Dependencies**: Uses only Python standard library
 
 ## Installation
 
