@@ -51,84 +51,91 @@ def print_banner(show_full: bool = True):
     username = get_username()
     cwd = get_short_path(os.getcwd())
 
-    # Clean ASCII Art Shield Logo
-    logo_lines = [
-        "[bold cyan]      ╭───────╮[/bold cyan]",
-        "[bold cyan]     ╱[/bold cyan] [yellow]▓▓▓▓▓[/yellow] [bold cyan]╲[/bold cyan]",
-        "[bold cyan]    ╱[/bold cyan]  [yellow]▓▓▓▓▓[/yellow]  [bold cyan]╲[/bold cyan]",
-        "[bold cyan]   │[/bold cyan]   [yellow]▓▓▓▓▓[/yellow]   [bold cyan]│[/bold cyan]",
-        "[bold cyan]   │[/bold cyan]   [yellow]▓▓▓▓▓[/yellow]   [bold cyan]│[/bold cyan]",
-        "[bold cyan]    ╲[/bold cyan]   [yellow]▓▓▓[/yellow]   [bold cyan]╱[/bold cyan]",
-        "[bold cyan]     ╲[/bold cyan]   [yellow]▓[/yellow]   [bold cyan]╱[/bold cyan]",
-        "[bold cyan]      ╲[/bold cyan]     [bold cyan]╱[/bold cyan]",
-        "[bold cyan]       ╰───╯[/bold cyan]",
-    ]
-
-    # Build left side with logo
-    left_lines = [
-        "",
-        f"  [bold white]Welcome back, {username}![/bold white]",
-        "",
-    ] + [f"  {line}" for line in logo_lines] + [
-        "",
-        f"  [bold cyan]LLM-Gardian[/bold cyan] [dim]v{__version__}[/dim]",
-        f"  [dim]{cwd}[/dim]",
-    ]
-
-    left_text = "\n".join(left_lines)
-
     if show_full:
-        # Right column content - Tips and info
-        right_lines = [
+        # Left side - Welcome and Logo
+        left_lines = [
             "",
+            f" [bold white]Welcome back {username}![/bold white]",
+            "",
+            "",
+            "          [bold cyan]* ▐▛███▜▌ *[/bold cyan]",
+            "         [bold cyan]* ▝▜█████▛▘ *[/bold cyan]",
+            "          [bold cyan]*  ▘▘ ▝▝  *[/bold cyan]",
+            "",
+            "",
+            f" [bold cyan]v{__version__}[/bold cyan] · LLM-Gardian · Prompt",
+            " Injection Protection",
+            f"      [dim]{cwd}[/dim]",
+        ]
+
+        # Right side - Tips and Quick Start
+        right_lines = [
+            "[bold yellow]Tips for getting started[/bold yellow]",
+            "[dim]Check prompts for injection patterns[/dim]",
+            "[dim]────────────────────────────────────────────[/dim]",
             "[bold yellow]Quick Start[/bold yellow]",
             "",
-            "[dim]Check a prompt:[/dim]",
+            "[dim]Basic check:[/dim]",
             "  [cyan]llm-gardian \"your prompt here\"[/cyan]",
             "",
             "[dim]Interactive mode:[/dim]",
             "  [cyan]llm-gardian -i[/cyan]",
             "",
-            "[dim]Batch check from file:[/dim]",
+            "[dim]Batch from file:[/dim]",
             "  [cyan]llm-gardian -f prompts.txt[/cyan]",
             "",
-            "[dim]─────────────────────────────────[/dim]",
-            "",
-            "[bold yellow]Options[/bold yellow]",
-            "  [cyan]-t, --threshold[/cyan]  [dim]Detection sensitivity (0.0-1.0)[/dim]",
-            "  [cyan]-v, --verbose[/cyan]    [dim]Show detailed pattern analysis[/dim]",
-            "  [cyan]-j, --json[/cyan]       [dim]Output results as JSON[/dim]",
-            "  [cyan]-q, --quiet[/cyan]      [dim]Minimal output (exit codes only)[/dim]",
-            "",
+            "[dim]Verbose output:[/dim]",
+            "  [cyan]llm-gardian -v \"prompt\"[/cyan]",
         ]
 
+        left_text = "\n".join(left_lines)
         right_text = "\n".join(right_lines)
 
         # Create the two-column layout
         left_panel = Text.from_markup(left_text)
         right_panel = Text.from_markup(right_text)
 
-        # Create a table for side-by-side layout
+        # Create a table for side-by-side layout with vertical separator
         layout_table = Table.grid(padding=(0, 2))
-        layout_table.add_column(width=35, justify="left")
         layout_table.add_column(width=48, justify="left")
-        layout_table.add_row(left_panel, right_panel)
+        layout_table.add_column(width=1, justify="center")
+        layout_table.add_column(width=50, justify="left")
+
+        # Create separator
+        separator = Text("\n".join(["│"] * 16), style="dim")
+
+        layout_table.add_row(left_panel, separator, right_panel)
 
         # Create the main panel
         main_panel = Panel(
             layout_table,
-            title=f"[bold cyan]LLM-Gardian[/bold cyan]",
-            subtitle="[dim]Prompt Injection Protection[/dim]",
+            title=f"[bold cyan]─── LLM-Gardian v{__version__} ───[/bold cyan]",
             border_style="cyan",
-            box=box.DOUBLE_EDGE,
+            box=box.ROUNDED,
             padding=(0, 1),
         )
     else:
-        # Compact banner
+        # Compact banner for interactive mode
+        left_lines = [
+            "",
+            f"   [bold white]Welcome back {username}![/bold white]",
+            "",
+            "",
+            "              [bold cyan]* ▐▛███▜▌ *[/bold cyan]",
+            "             [bold cyan]* ▝▜█████▛▘ *[/bold cyan]",
+            "              [bold cyan]*  ▘▘ ▝▝  *[/bold cyan]",
+            "",
+            "",
+            f"   [bold cyan]v{__version__}[/bold cyan] · LLM-Gardian · Prompt Injection Protection",
+            f"        [dim]{cwd}[/dim]",
+        ]
+
+        left_text = "\n".join(left_lines)
         left_panel = Text.from_markup(left_text)
+
         main_panel = Panel(
             left_panel,
-            title=f"[bold cyan]LLM-Gardian v{__version__}[/bold cyan]",
+            title=f"[bold cyan]─── LLM-Gardian v{__version__} ───[/bold cyan]",
             border_style="cyan",
             box=box.ROUNDED,
             padding=(0, 1),
