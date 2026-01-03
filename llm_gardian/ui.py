@@ -43,7 +43,7 @@ def get_short_path(path, max_length=45):
 
 
 def print_banner(show_full: bool = True):
-    """Display beautiful welcome banner with shield theme"""
+    """Display clean and minimal welcome banner"""
     if not RICH_AVAILABLE:
         print(f"LLM-Gardian v{__version__} - Prompt Injection Protection")
         return
@@ -52,56 +52,58 @@ def print_banner(show_full: bool = True):
     cwd = get_short_path(os.getcwd())
 
     if show_full:
-        # Main content with shield logo
+        # Create a clean, centered layout with character logo
         content_lines = [
             "",
-            f"[bold green]┌─[/bold green] [bold white]Hello {username}![/bold white] [bold green]─[/bold green] [dim]Welcome to LLM-Gardian[/dim]",
+            f"              [bold white]Welcome back, {username}[/bold white]",
             "",
-            "          [bold green]╔═══════════╗[/bold green]",
-            "          [bold green]║[/bold green] [yellow]🛡️  GUARD[/yellow] [bold green]║[/bold green]",
-            "          [bold green]║[/bold green]  [yellow]ACTIVE[/yellow]  [bold green]║[/bold green]",
-            "          [bold green]╚═══════════╝[/bold green]",
             "",
-            f"[dim]Version:[/dim] [bold cyan]{__version__}[/bold cyan]  [dim]│[/dim]  [dim]Path:[/dim] [cyan]{cwd}[/cyan]",
+            "                      [bold green]▄▀▀▀▀▀▀▀▄[/bold green]",
+            "                     [bold green]█[/bold green] [yellow]◉[/yellow]   [yellow]◉[/yellow] [bold green]█[/bold green]",
+            "                     [bold green]█[/bold green]  [yellow]▂▂▂[/yellow]  [bold green]█[/bold green]",
+            "                      [bold green]▀▄▄▄▄▄▄▄▀[/bold green]",
             "",
-            "[bold yellow]🚀 Quick Commands[/bold yellow]",
-            "[dim]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[/dim]",
             "",
-            "  [green]►[/green] [white]Check a prompt[/white]        [cyan]llm-gardian \"your text here\"[/cyan]",
-            "  [green]►[/green] [white]Interactive mode[/white]      [cyan]llm-gardian -i[/cyan]",
-            "  [green]►[/green] [white]Batch from file[/white]       [cyan]llm-gardian -f prompts.txt[/cyan]",
-            "  [green]►[/green] [white]Detailed analysis[/white]     [cyan]llm-gardian -v \"text\"[/cyan]",
-            "  [green]►[/green] [white]JSON output[/white]           [cyan]llm-gardian -j \"text\"[/cyan]",
+            f"              [cyan]LLM-Gardian[/cyan] [dim]·[/dim] [dim]v{__version__}[/dim]",
+            f"              [dim]{cwd}[/dim]",
             "",
-            "[dim]💡 Tip: Use[/dim] [cyan]-t 0.7[/cyan] [dim]to adjust detection sensitivity (0.0-1.0)[/dim]",
+            "",
+            "[bold yellow]Quick Start:[/bold yellow]",
+            "",
+            "  [cyan]llm-gardian[/cyan] [dim]\"your prompt here\"[/dim]     [dim]# Check a single prompt[/dim]",
+            "  [cyan]llm-gardian -i[/cyan]                      [dim]# Interactive mode[/dim]",
+            "  [cyan]llm-gardian -f[/cyan] [dim]prompts.txt[/dim]         [dim]# Batch check from file[/dim]",
+            "  [cyan]llm-gardian -v[/cyan] [dim]\"prompt\"[/dim]            [dim]# Verbose output[/dim]",
+            "  [cyan]llm-gardian -t 0.7[/cyan] [dim]\"prompt\"[/dim]       [dim]# Custom threshold[/dim]",
             "",
         ]
 
         content_text = "\n".join(content_lines)
         content_panel = Text.from_markup(content_text)
 
-        # Create the main panel with shield theme
+        # Simple, elegant panel
         main_panel = Panel(
             content_panel,
-            title="[bold green]🛡️  LLM-Gardian[/bold green] [dim]│[/dim] [bold white]Prompt Injection Protection[/bold white]",
-            subtitle="[dim]Press Ctrl+C to exit | Type --help for more options[/dim]",
-            border_style="green",
-            box=box.DOUBLE,
+            title="[bold cyan]LLM-Gardian[/bold cyan] [dim]Prompt Injection Detection[/dim]",
+            border_style="cyan",
+            box=box.ROUNDED,
             padding=(0, 2),
         )
     else:
-        # Compact banner for interactive mode
+        # Minimal compact banner
         compact_lines = [
             "",
-            f"[bold white]Welcome {username}![/bold white]",
+            f"         [bold white]Welcome back, {username}[/bold white]",
             "",
-            "     [bold green]╔═══════════╗[/bold green]",
-            "     [bold green]║[/bold green] [yellow]🛡️  GUARD[/yellow] [bold green]║[/bold green]",
-            "     [bold green]║[/bold green]  [yellow]ACTIVE[/yellow]  [bold green]║[/bold green]",
-            "     [bold green]╚═══════════╝[/bold green]",
             "",
-            f"[bold cyan]LLM-Gardian[/bold cyan] [dim]v{__version__}[/dim]",
-            f"[dim]{cwd}[/dim]",
+            "                [bold green]▄▀▀▀▀▀▀▀▄[/bold green]",
+            "               [bold green]█[/bold green] [yellow]◉[/yellow]   [yellow]◉[/yellow] [bold green]█[/bold green]",
+            "               [bold green]█[/bold green]  [yellow]▂▂▂[/yellow]  [bold green]█[/bold green]",
+            "                [bold green]▀▄▄▄▄▄▄▄▀[/bold green]",
+            "",
+            "",
+            f"         [cyan]LLM-Gardian[/cyan] [dim]v{__version__}[/dim]",
+            f"         [dim]{cwd}[/dim]",
             "",
         ]
 
@@ -110,10 +112,10 @@ def print_banner(show_full: bool = True):
 
         main_panel = Panel(
             compact_panel,
-            title="[bold green]🛡️  LLM-Gardian[/bold green]",
-            border_style="green",
+            title="[bold cyan]LLM-Gardian[/bold cyan]",
+            border_style="cyan",
             box=box.ROUNDED,
-            padding=(0, 2),
+            padding=(0, 1),
         )
 
     console.print(main_panel)
