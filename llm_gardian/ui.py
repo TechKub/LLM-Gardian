@@ -43,7 +43,7 @@ def get_short_path(path, max_length=45):
 
 
 def print_banner(show_full: bool = True):
-    """Display beautiful welcome screen similar to Claude Code"""
+    """Display beautiful welcome banner with shield theme"""
     if not RICH_AVAILABLE:
         print(f"LLM-Gardian v{__version__} - Prompt Injection Protection")
         return
@@ -52,93 +52,68 @@ def print_banner(show_full: bool = True):
     cwd = get_short_path(os.getcwd())
 
     if show_full:
-        # Left side - Welcome and Logo
-        left_lines = [
+        # Main content with shield logo
+        content_lines = [
             "",
-            f" [bold white]Welcome back {username}![/bold white]",
+            f"[bold green]┌─[/bold green] [bold white]Hello {username}![/bold white] [bold green]─[/bold green] [dim]Welcome to LLM-Gardian[/dim]",
             "",
+            "          [bold green]╔═══════════╗[/bold green]",
+            "          [bold green]║[/bold green] [yellow]🛡️  GUARD[/yellow] [bold green]║[/bold green]",
+            "          [bold green]║[/bold green]  [yellow]ACTIVE[/yellow]  [bold green]║[/bold green]",
+            "          [bold green]╚═══════════╝[/bold green]",
             "",
-            "          [bold cyan]* ▐▛███▜▌ *[/bold cyan]",
-            "         [bold cyan]* ▝▜█████▛▘ *[/bold cyan]",
-            "          [bold cyan]*  ▘▘ ▝▝  *[/bold cyan]",
+            f"[dim]Version:[/dim] [bold cyan]{__version__}[/bold cyan]  [dim]│[/dim]  [dim]Path:[/dim] [cyan]{cwd}[/cyan]",
             "",
+            "[bold yellow]🚀 Quick Commands[/bold yellow]",
+            "[dim]━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━[/dim]",
             "",
-            f" [bold cyan]v{__version__}[/bold cyan] · LLM-Gardian · Prompt",
-            " Injection Protection",
-            f"      [dim]{cwd}[/dim]",
+            "  [green]►[/green] [white]Check a prompt[/white]        [cyan]llm-gardian \"your text here\"[/cyan]",
+            "  [green]►[/green] [white]Interactive mode[/white]      [cyan]llm-gardian -i[/cyan]",
+            "  [green]►[/green] [white]Batch from file[/white]       [cyan]llm-gardian -f prompts.txt[/cyan]",
+            "  [green]►[/green] [white]Detailed analysis[/white]     [cyan]llm-gardian -v \"text\"[/cyan]",
+            "  [green]►[/green] [white]JSON output[/white]           [cyan]llm-gardian -j \"text\"[/cyan]",
+            "",
+            "[dim]💡 Tip: Use[/dim] [cyan]-t 0.7[/cyan] [dim]to adjust detection sensitivity (0.0-1.0)[/dim]",
+            "",
         ]
 
-        # Right side - Tips and Quick Start
-        right_lines = [
-            "[bold yellow]Tips for getting started[/bold yellow]",
-            "[dim]Check prompts for injection patterns[/dim]",
-            "[dim]────────────────────────────────────────────[/dim]",
-            "[bold yellow]Quick Start[/bold yellow]",
-            "",
-            "[dim]Basic check:[/dim]",
-            "  [cyan]llm-gardian \"your prompt here\"[/cyan]",
-            "",
-            "[dim]Interactive mode:[/dim]",
-            "  [cyan]llm-gardian -i[/cyan]",
-            "",
-            "[dim]Batch from file:[/dim]",
-            "  [cyan]llm-gardian -f prompts.txt[/cyan]",
-            "",
-            "[dim]Verbose output:[/dim]",
-            "  [cyan]llm-gardian -v \"prompt\"[/cyan]",
-        ]
+        content_text = "\n".join(content_lines)
+        content_panel = Text.from_markup(content_text)
 
-        left_text = "\n".join(left_lines)
-        right_text = "\n".join(right_lines)
-
-        # Create the two-column layout
-        left_panel = Text.from_markup(left_text)
-        right_panel = Text.from_markup(right_text)
-
-        # Create a table for side-by-side layout with vertical separator
-        layout_table = Table.grid(padding=(0, 2))
-        layout_table.add_column(width=48, justify="left")
-        layout_table.add_column(width=1, justify="center")
-        layout_table.add_column(width=50, justify="left")
-
-        # Create separator
-        separator = Text("\n".join(["│"] * 16), style="dim")
-
-        layout_table.add_row(left_panel, separator, right_panel)
-
-        # Create the main panel
+        # Create the main panel with shield theme
         main_panel = Panel(
-            layout_table,
-            title=f"[bold cyan]─── LLM-Gardian v{__version__} ───[/bold cyan]",
-            border_style="cyan",
-            box=box.ROUNDED,
-            padding=(0, 1),
+            content_panel,
+            title="[bold green]🛡️  LLM-Gardian[/bold green] [dim]│[/dim] [bold white]Prompt Injection Protection[/bold white]",
+            subtitle="[dim]Press Ctrl+C to exit | Type --help for more options[/dim]",
+            border_style="green",
+            box=box.DOUBLE,
+            padding=(0, 2),
         )
     else:
         # Compact banner for interactive mode
-        left_lines = [
+        compact_lines = [
             "",
-            f"   [bold white]Welcome back {username}![/bold white]",
+            f"[bold white]Welcome {username}![/bold white]",
             "",
+            "     [bold green]╔═══════════╗[/bold green]",
+            "     [bold green]║[/bold green] [yellow]🛡️  GUARD[/yellow] [bold green]║[/bold green]",
+            "     [bold green]║[/bold green]  [yellow]ACTIVE[/yellow]  [bold green]║[/bold green]",
+            "     [bold green]╚═══════════╝[/bold green]",
             "",
-            "              [bold cyan]* ▐▛███▜▌ *[/bold cyan]",
-            "             [bold cyan]* ▝▜█████▛▘ *[/bold cyan]",
-            "              [bold cyan]*  ▘▘ ▝▝  *[/bold cyan]",
+            f"[bold cyan]LLM-Gardian[/bold cyan] [dim]v{__version__}[/dim]",
+            f"[dim]{cwd}[/dim]",
             "",
-            "",
-            f"   [bold cyan]v{__version__}[/bold cyan] · LLM-Gardian · Prompt Injection Protection",
-            f"        [dim]{cwd}[/dim]",
         ]
 
-        left_text = "\n".join(left_lines)
-        left_panel = Text.from_markup(left_text)
+        compact_text = "\n".join(compact_lines)
+        compact_panel = Text.from_markup(compact_text)
 
         main_panel = Panel(
-            left_panel,
-            title=f"[bold cyan]─── LLM-Gardian v{__version__} ───[/bold cyan]",
-            border_style="cyan",
+            compact_panel,
+            title="[bold green]🛡️  LLM-Gardian[/bold green]",
+            border_style="green",
             box=box.ROUNDED,
-            padding=(0, 1),
+            padding=(0, 2),
         )
 
     console.print(main_panel)
